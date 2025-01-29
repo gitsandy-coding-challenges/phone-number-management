@@ -1,0 +1,81 @@
+{
+	"info": {
+		"_postman_id": "ade5ae46-19e6-4d5a-b8f2-8f46632ed750",
+		"name": "phone-number-management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7249405"
+	},
+	"item": [
+		{
+			"name": "getAllPhoneNumbers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/phone-numbers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"phone-numbers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCustomerPhoneNumbers",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/customers/2/phone-numbers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"2",
+						"phone-numbers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activatePhoneNumber",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/customers/2/phone-numbers/5555555555",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"2",
+						"phone-numbers",
+						"5555555555"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

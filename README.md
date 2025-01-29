@@ -149,3 +149,11 @@ A docker file is written for containerisation of application.
 ## Commands to test docker
 1. Create the Docker image: docker build -t phone-number-management .
 2. Run the Docker container: docker run -p 8080:8080 phone-number-management
+
+
+## Postman collections
+Postman requests have been attached in postman folder. Import the file in your postman app and execute the requests
+
+
+## Further improvements:
+1. The static datasource can be exported to in memory database like H2 database
