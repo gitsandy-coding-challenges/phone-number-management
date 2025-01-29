@@ -1,0 +1,102 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.2'
+	id 'io.spring.dependency-management' version '1.1.7'
+	id 'org.openapi.generator' version '7.9.0'
+}
+
+
+group = 'com.telecom.api'
+version = '0.0.1-SNAPSHOT'
+
+springBoot {
+	mainClass = 'com.telecom.phone.number.management.PhoneNumberManagementApplication'
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// OpenAPI Generator dependencies
+	implementation 'io.swagger.core.v3:swagger-annotations:2.2.16'
+	implementation 'io.swagger.core.v3:swagger-models:2.2.16'
+
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'  // For validation annotations
+	implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'  // For @Generated annotation
+	implementation 'org.openapitools:jackson-databind-nullable:0.2.4' // For JsonNullable support
+
+	// Jackson (for JSON processing)
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2'
+
+	implementation('org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0') {
+		exclude group: 'org.springdoc', module: 'springdoc-openapi-common'
+	}
+
+
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.4'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.11.4'
+	testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.15.2'
+
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.15.2'  // Use the JUnit 5 compatible Mockito version
+}
+
+sourceSets {
+	main {
+		java {
+			srcDir "$buildDir/generated/src/main/java"
+		}
+	}
+}
+
+openApiGenerate {
+	generatorName = "spring"
+	inputSpec = "$rootDir/src/main/resources/swagger/phone-number-api-v1.0.yaml"
+	outputDir = layout.buildDirectory.dir("generated").get().asFile.toString()
+	apiPackage = "com.telecom.phone.number.management.api"
+	modelPackage = "com.telecom.phone.number.management.model"
+	configOptions = [
+			"useJakartaEe"          : "true",
+			"serializationLibrary"   : "jackson",
+			"schemaMappings"         : "long:Long"  // Correct way to define schema mapping
+	]
+}
+
+tasks.compileJava {
+	dependsOn tasks.openApiGenerate
+}
+
+tasks.clean {
+	delete layout.buildDirectory.dir("generated")
+}
+
+tasks.test {
+	useJUnitPlatform()
+	// jvmArgs += "-javaagent:${configurations.testRuntimeClasspath.asPath}"
+}
+
+

@@ -1,0 +1,141 @@
+openapi: 3.0.3
+info:
+  title: Telecom Phone Number Management API
+  description: API for managing phone numbers associated with customers. Handles new and existing phone numbers with activation support.
+  version: 1.1.0
+  contact:
+    name: API Support
+    email: support@telecom.com
+
+servers:
+  - url: http://localhost:8080/api
+    description: Local Development Server
+
+paths:
+  /phone-numbers:
+    get:
+      summary: Get all phone numbers
+      description: Retrieve all phone numbers stored in the system, with HATEOAS links.
+      operationId: getAllPhoneNumbers
+      responses:
+        '200':
+          description: A list of all phone numbers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneNumbersResponse'
+
+  /customers/{customerId}/phone-numbers:
+    get:
+      summary: Get all phone numbers of a customer
+      description: Retrieve all phone numbers associated with a specific customer.
+      operationId: getCustomerPhoneNumbers
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: The unique ID of the customer.
+          schema:
+            type: long
+            minimum: 1
+      responses:
+        '200':
+          description: A list of phone numbers for the specified customer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneNumbersResponse'
+        '404':
+          description: Customer not found.
+  /customers/{customerId}/phone-numbers/{phoneNumber}:
+    patch:
+      summary: Activate an existing phone number
+      description: Activates or updates an existing phone number for a customer.
+      operationId: activatePhoneNumber
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: The unique ID of the customer.
+          schema:
+            type: long
+            minimum: 1
+        - name: phoneNumber
+          in: path
+          required: true
+          description: The phone number to activate.
+          schema:
+            type: string
+            pattern: '^\d{10}$'
+      responses:
+        '200':
+          description: Phone number activated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhoneNumbersResponse'
+        '404':
+          description: Phone number not found.
+
+
+components:
+  schemas:
+    PhoneNumbersResponse:
+      type: object
+      properties:
+        phoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+          additionalProperties: false
+
+    PhoneNumberResponse:
+      type: object
+      properties:
+        number:
+          type: string
+          description: The phone number.
+        isActive:
+          type: boolean
+          description: Whether the phone number is active.
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+          additionalProperties: false
+    PhoneNumber:
+      type: object
+      properties:
+        number:
+          type: string
+          description: The phone number.
+          example: "1234567890"
+        isActive:
+          type: boolean
+          description: Whether the phone number is active.
+          example: false
+        _links:
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/Link'
+          additionalProperties: false
+    Link:
+      type: object
+      properties:
+        href:
+          type: string
+          description: The URL of the link.
+        httpMethod:
+          type: string
+          description: Http method type
+        templated:
+          type: boolean
+          description: Whether the link is templated.
+          default: false

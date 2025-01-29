@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: phone-number-management
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources.add-mappings: false
+  profiles:
+    active: "dev"
+
+
+# actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics
+
+server:
+  servlet:
+    context-path: /api/v1
+
