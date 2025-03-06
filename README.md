@@ -1,5 +1,6 @@
 # Telecom Phone Number Management API
 
+## This solution was developed for Belong in January/2024
 ## Overview
 
 The **Telecom Phone Number Management API** is designed for managing phone numbers associated with customers. It provides functionality to retrieve, activate, and manage phone numbers for customers. The API uses **HATEOAS** (Hypermedia as the engine of application state), providing navigable links within responses.
